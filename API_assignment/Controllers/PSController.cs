@@ -48,13 +48,14 @@ namespace API_assignment.Controllers
             //var supplier = _context.Suppliers.FirstOrDefault(t => t.SupplierID == produceSupplier.SupplierID);
             var produce = _context.Produces.Where(t => t.ProduceID == produceSupplier.ProduceID).FirstOrDefault();
             var supplier= _context.Suppliers.Where(t => t.SupplierID == produceSupplier.SupplierID).FirstOrDefault();
-            if (produce == null || supplier == null || produceSupplier.Qty.ToString() ==null || produceSupplier.Qty.ToString() =="")
+            var ps = _context.ProduceSuppliers.Where(t => t.ProduceID == produceSupplier.ProduceID && t.SupplierID == produceSupplier.SupplierID).FirstOrDefault();
+            if (ps!= null ||produce == null || supplier == null || produceSupplier.Qty.ToString() ==null || produceSupplier.Qty.ToString() =="")
             {
                 return BadRequest();
             }
             _context.ProduceSuppliers.Add(produceSupplier);
-            _context.SaveChanges();
-            return new ObjectResult(produceSupplier);
+            _context.SaveChanges();          
+            return Accepted();
         }
         [HttpPut]
         [Route("edit")] // Custom route
